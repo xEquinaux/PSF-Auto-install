@@ -1,0 +1,15 @@
+MODIFICATION NOTICE
+Date of original notice: 
+10/24/2023
+
+This script ("script.sh") modifies ./pslogin/src/main/scala/LoginConfig.scala, 
+line 5. 
+
+Bear in mind: upon running the script, this file is updated to display the 
+precise date of its modification.
+
+Modifications that this script makes to this particular file imply accordance 
+with the license contained within PSF's "LICENSE" file as was in 2020.
+
+Modification date[s]:
+
