@@ -36,6 +36,7 @@
     <None Include="App.config" />
     <None Include="LICENSE" />
     <None Include="NOTICE" />
+    <None Include="README.md" />
     <None Include="script_latest.sh" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
