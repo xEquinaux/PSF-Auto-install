@@ -1,12 +1,15 @@
 #!/bin/sh
 printf "Headless PSF Login Server setup script\n";
 sleep 3;
+
 printf "creating directories\n";
 sudo mkdir ./planetside;
 cd ./planetside;
+
 printf "getting jdk 8 and scala\n";
 sudo apt-get -y install openjdk-8-jdk-headless;
 sudo apt-get -y install scala;
+
 printf "this section is dedicated to installing sbt\n";
 sudo apt-get update;
 sudo apt-get -y install apt-transport-https curl gnupg -yqq;
@@ -16,10 +19,12 @@ curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89
 sudo chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg;
 sudo apt-get update;
 sudo apt-get -y install sbt;
+
 printf "acquiring apt  configuration files for installing postgresql 14\n";
 sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list';
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -;
 sudo apt-get update;
+
 printf "postgres installation and the following PSF login server setup\n";
 ## Pick which branch to comment out
 ## May 26th, 2020 branch
@@ -35,12 +40,14 @@ git clone https://github.com/psforever/PSF-LoginServer.git;
 cd ./PSF-LoginServer;
 sudo wget https://github.com/psforever/PSCrypto/releases/download/v1.1/pscrypto-lib-1.1.zip;
 unzip ./pscrypto-lib-1.1.zip;
+
 printf "Finishing the postgresql setup\n";
 sudo systemctl restart postgresql;
 sudo runuser -c 'psql -c "CREATE DATABASE psforever;"' postgres;
 sudo runuser -c 'psql -c "CREATE USER psforever;"' postgres;
 sudo runuser -c "psql -c \"ALTER USER psforever WITH PASSWORD 'psforever';\"" postgres;
 sudo runuser -c 'psql -c "ALTER DATABASE psforever OWNER TO psforever;"' postgres;
+
 printf "# Configuring server to be accessible by remote connections:\n" > README;
 printf "# Change the line here from\n" >> README;
 printf "# bind = 127.0.0.1\n" >> README;
@@ -74,16 +81,20 @@ printf "server/run\n" >> README;
 printf "if manually starting" >> README;
 printf "\n";
 printf "Check README file in the local directory for information on making the PSF server public after it is done compiling. To run the server, either follow the README or use bash to run 'start_server.sh'.\n" >> README;
+
 # printf "sudo sbt pslogin/run" > start_server.sh;
 printf "sudo sbt server/run" > start_server.sh;
 printf "\n";
+
 printf "Allow port 51000\n";
 sudo ufw enable;
 sudo ufw allow 51000;
 sudo ufw allow 51001;
 sudo ufw reload;
+
 set dt = $(date '+%m/%d/%Y');
 printf "$dt \n" >> NOTICE;
+
 ## For the May 2020 release
 # printf "Make server IP address public\n";
 # printf "// Copyright (c) 2017 PSForever\n" > ./PSF-LoginServer/pslogin/src/main/scala/LoginConfig.scala;
@@ -97,8 +108,10 @@ printf "$dt \n" >> NOTICE;
 ## For the May 26th, 2020 lscript:
 # sudo sbt pslogin/run
 ## For the latest:
+
 printf "run a nautilus instance for ease of directory usage\n";
 # sudo nautilus;
 sudo sbt server/compile;
+
 printf "running the server post-compile\n";
 sudo sbt server/run;
